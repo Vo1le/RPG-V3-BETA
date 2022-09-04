@@ -1,4 +1,3 @@
-
 using System.Collections;
 
 
@@ -14,9 +13,8 @@ public class Player : MonoBehaviour
     public Transform cam;
 
     public float speed = 6;
-    public float gravity = -9f;
+    public float gravity = -9.81f;
     public float jumpHeight = 3;
-    public float xplayerjump = 0;
     Vector3 velocity;
     bool isGrounded;
 
@@ -26,19 +24,15 @@ public class Player : MonoBehaviour
 
     float turnSmoothVelocity;
     public float turnSmoothTime = 0.1f;
-    
-    
 
-    void Start()
-    {
-        
+    // Update is called once per frame
+    void Start() {
+        Cursor.lockState = CursorLockMode.Locked;
     }
-    
     void Update()
-   {
-    
-        
-    isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+    {
+        //jump
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
         {
@@ -49,10 +43,10 @@ public class Player : MonoBehaviour
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
         }
-        
+        //gravity
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
-        
+        //walk
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
@@ -66,7 +60,5 @@ public class Player : MonoBehaviour
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDir.normalized * speed * Time.deltaTime);
         }
-
     }
-
 }
